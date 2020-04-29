@@ -1,0 +1,43 @@
+﻿@using Microsoft.Extensions.Options
+@inject IOptions<ReCAPTCHASettings> GoogleReCAPTCHA
+
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Home" asp-action="Login" method="post">
+            <input asp-for="Token" type="hidden" />
+            <div class="form-group">
+                <label asp-for="Email">Email address</label>
+                <input asp-for="Email" class="form-control" placeholder="Enter email">
+            </div>
+            <div class="form-group">
+                <label asp-for="Password">Password</label>
+                <input asp-for="Password" type="password" class="form-control" placeholder="Enter password">
+            </div>
+
+            <div class="custom-control custom-checkbox mr-sm-2">
+                <input asp-for="RememberMe" class="custom-control-input">
+                <label class="custom-control-label" asp-for="RememberMe">Remember me</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2">Login</button>
+        </form>
+    </div>
+</div>
+    
+
+@section Scripts{
+    <script src="https://www.google.com/recaptcha/api.js?render=@GoogleReCAPTCHA.Value.Site_Key"></script>
+    <script>
+    grecaptcha.ready(function() {
+    grecaptcha.execute('@GoogleReCAPTCHA.Value.Site_Key', {action: 'homepage'}).then(function(token) {
+        console.log(token);
+        $("#Token").val(token);
+    });
+    });
+    </script>
+}
